@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\TaskModel;
+use \App\Entities\Task;
 
 class Tasks extends BaseController
 {
@@ -25,24 +26,29 @@ class Tasks extends BaseController
     }
 
     function new () {
-        return view('Tasks/new');
+        $task = new Task();
+
+        return view('Tasks/new', [
+            'task' => $task,
+        ]);
     }
 
     public function create()
     {
         $model = new TaskModel();
 
-        $result = $model->insert([
-            'description' => $this->request->getPost("description"),
-        ]);
+        $task = new Task($this->request->getPost());
 
-        if ($result === false) {
-            return redirect()->back()
-                    ->with('errors', $model->errors())
-                    ->with('warning', 'Invalid data');
+        $result = $model->insert($task);
+
+        if ($result) {
+            return redirect()->to("/tasks/show/{$model->insertID}")
+                ->with('info', 'Task created successfully');
         } else {
-            return redirect()->to("/tasks/show/$result")
-                        ->with('info','Task created successfully');
+            return redirect()->back()
+                ->with('errors', $model->errors())
+                ->with('warning', 'Invalid data')
+                ->withInput();
         }
     }
 
@@ -52,8 +58,8 @@ class Tasks extends BaseController
 
         $task = $model->find($id);
 
-        return view('Tasks/edit',[
-            'task' => $task
+        return view('Tasks/edit', [
+            'task' => $task,
         ]);
     }
 
@@ -61,11 +67,20 @@ class Tasks extends BaseController
     {
         $model = new TaskModel();
 
-        $model->update($id,[
-            'description' => $this->request->getPost('description')
+        $result = $model->update($id, [
+            'description' => $this->request->getPost('description'),
         ]);
 
-        return redirect()->to("/tasks/show/$id")
-                        ->with('info','Task updated successfully');
+        if ($result) {
+            return redirect()->to("/tasks/show/$id")
+                ->with('info', 'Task updated successfully');
+
+        } else {
+            return redirect()->back()
+                ->with('errors', $model->errors())
+                ->with('warning', 'Invalid data')
+                ->withInput();
+        }
+
     }
 }

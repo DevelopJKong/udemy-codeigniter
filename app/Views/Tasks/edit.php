@@ -1,28 +1,25 @@
-<?= $this->extend('layouts/default') ?>
+<?=$this->extend('layouts/default')?>
 
-<?= $this->section('title') ?>Edit task<?= $this->endSection() ?>
+<?=$this->section('title')?>Edit task<?=$this->endSection()?>
 
-<?= $this->section('content') ?>
+<?=$this->section('content')?>
 
 <h1>Edit task</h1>
 
-<?php if(session()->has('errors')) : ?>
+<?php if (session()->has('errors')): ?>
     <ul>
-        <?php foreach(session('errors') as $error) :?>
-                <li><?= $error ?></li>
+        <?php foreach (session('errors') as $error): ?>
+                <li><?=$error?></li>
         <?php endforeach;?>
     </ul>
-<?php endif; ?>
+<?php endif;?>
 
-<?= form_open("/tasks/update/".$task['id']) ?>
-<div>
-    <label for="description">Description</label>
-    <input type="text" name="description" id="description" placeholder="type here..." value="<?= esc($task['description']) ?>"/>
-</div>
+<?=form_open("/tasks/update/" . $task->id)?>
 
+<?=$this->include('Tasks/form')?>
 <button>Save</button>
-<a href="<?= site_url('/tasks/show/'.$task['id']) ?>">Cancel</a>
+<a href="<?=site_url('/tasks/show/' . $task->id)?>">Cancel</a>
 </form>
 
 
-<?= $this->endSection(); ?>
+<?=$this->endSection();?>
