@@ -19,7 +19,7 @@
 <?=$this->include('Tasks/form')?>
 <button>Save</button>
 <a href="<?=site_url('/tasks/show/' . $task->id)?>">Cancel</a>
-</form>
+<?= form_close()?>
 
 
 <?=$this->endSection();?>

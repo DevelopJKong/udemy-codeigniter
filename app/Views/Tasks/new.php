@@ -22,7 +22,7 @@
 
 <button>Save</button>
 <a href="<?= site_url('/tasks') ?>">Cancel</a>
-</form>
+<?= form_close()?>
 
 
 <?= $this->endSection(); ?>
