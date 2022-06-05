@@ -7,7 +7,7 @@
     <h1>Welcome</h1>
 
 
-    <?php if (session()->has('user_id')): ?>
+    <?php if (current_user()): ?>
         <p>Hello! <?= current_user()->name?></p>
         <a href="<?=site_url("/tasks")?>">See Tasks</a>
         <a href="<?=site_url("/logout")?>">Logout</a>

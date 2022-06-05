@@ -17,17 +17,17 @@ class UserModel extends \CodeIgniter\Model
         'name' => 'required',
         'email' => 'required|valid_email|is_unique[user.email]',
         'password' => 'required|min_length[6]',
-        'password_confirmation'=> 'required|matches[password]'
+        'password_confirmation' => 'required|matches[password]',
     ];
 
     protected $validationMessages = [
         'email' => [
-            'is_unique' => 'That email address is taken'
+            'is_unique' => 'That email address is taken',
         ],
         'password_confirmation' => [
             'required' => 'Please confirm the password',
-            'matches' => 'Please enter the same password again'
-        ]
+            'matches' => 'Please enter the same password again',
+        ],
     ];
 
     protected $beforeInsert = ['hashPassword'];
@@ -41,5 +41,11 @@ class UserModel extends \CodeIgniter\Model
         }
 
         return $data;
+    }
+
+    public function findByEmail($email)
+    {
+        return $this->where('email', $email)
+            ->first();
     }
 }

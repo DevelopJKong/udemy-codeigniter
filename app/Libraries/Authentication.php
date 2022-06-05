@@ -6,25 +6,25 @@ use App\Models\UserModel;
 
 class Authentication
 {
-    public function login($email,$password)
+    private $user;
+
+    public function login($email, $password)
     {
         $model = new UserModel();
 
-        $user = $model->where('email',$email)
-                    ->first();
+        $user = $model->findByEmail($email);
 
-        if($user === null) {
-            return false; 
-        } 
-
-        if(!password_verify($password,$user->password_hash)) {
+        if ($user === null) {
             return false;
         }
 
+        if (!$user->verifyPassword($password)) {
+            return false;
+        }
 
-        $session =session();
+        $session = session();
         $session->regenerate(); // 이렇게 해주는 정확한 이유는 뭐지?
-        $session->set('user_id',$user->id);
+        $session->set('user_id', $user->id);
 
         return true;
     }
@@ -34,5 +34,18 @@ class Authentication
         session()->destroy();
     }
 
+    public function getCurrentUser()
+    {
+        if (!session()->has('user_id')) {
+            return null;
+        }
+
+        if ($this->user === null) {
+            $model = new UserModel();
+
+            $this->user = $model->find(session()->get('user_id'));
+        }
+        return $this->user;
+    }
 
 }

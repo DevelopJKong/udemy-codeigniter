@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Libraries\Authentication;
+use Config\Services;
 
 class Login extends BaseController
 {
@@ -15,7 +16,8 @@ class Login extends BaseController
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $auth = new Authentication();
+        // $auth = Services::auth();
+        $auth = service('auth');
 
         if ($auth->login($email, $password)) {
             return redirect()->to('/')
@@ -29,7 +31,7 @@ class Login extends BaseController
     }
     public function delete()
     {
-        $auth = new Authentication();
+        $auth = service('auth');
 
         $auth->logout();
 
