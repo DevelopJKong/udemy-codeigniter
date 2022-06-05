@@ -36,7 +36,7 @@ class Authentication
 
     public function getCurrentUser()
     {
-        if (!session()->has('user_id')) {
+        if (!$this->isLoggedIn()) {
             return null;
         }
 
@@ -46,6 +46,11 @@ class Authentication
             $this->user = $model->find(session()->get('user_id'));
         }
         return $this->user;
+    }
+
+    public function isLoggedIn()
+    {
+        return session()->has('user_id');
     }
 
 }

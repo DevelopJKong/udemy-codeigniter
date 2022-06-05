@@ -17,6 +17,7 @@ class Tasks extends BaseController
     public function index()
     {
 
+
         $data = $this->model->findAll();
 
         return view('Tasks/index', ['tasks' => $data]);
@@ -106,7 +107,7 @@ class Tasks extends BaseController
             'task' => $task,
         ]);
     }
-    
+
     private function getTaskOr404($id)
     {
         $task = $this->model->find($id);
