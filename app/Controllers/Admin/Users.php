@@ -46,7 +46,7 @@ class Users extends \App\Controllers\BaseController
 
         $user = new User($this->request->getPost());
 
-        $result = $this->model->insert($user);
+        $result = $this->model->protect(false)->insert($user);
 
         if ($result) {
             return redirect()->to("/admin/users/show/{$this->model->insertID}")
@@ -70,6 +70,55 @@ class Users extends \App\Controllers\BaseController
     }
 
 
+    public function update($id)
+    {
+        $user = $this->getUserOr404($id);
+
+        $post = $this->request->getPost();
+
+        if(empty($post['password'])) {
+            $this->model->disablePasswordValidation();
+
+            unset($post['password']);
+            unset($post['password_confirmation']);
+        }
+
+        $user->fill($post);
+
+        if (!$user->hasChanged()) {
+            return redirect()->back()
+                ->with('warning', 'Nothing to update')
+                ->withInput();
+        }
+
+        if ($this->model->protect(false)->save($user)) {
+            return redirect()->to("/admin/users/show/$id")
+                ->with('info', 'User updated successfully');
+
+        } else {
+            return redirect()->back()
+                ->with('errors', $this->model->errors())
+                ->with('warning', 'Invalid data')
+                ->withInput();
+        }
+
+    }
+
+
+    public function delete($id)
+    {
+        $user = $this->getUserOr404($id);
+
+        if($this->request->getMethod() === 'post') {
+            $this->model->delete($id);
+
+            return redirect()->to('/admin/users')
+                    ->with('info','User deleted');
+        }
+        return view('Admin/Users/delete',[
+            'user' =>$user
+        ]);
+    }
 
     private function getUserOr404($id)
 	{

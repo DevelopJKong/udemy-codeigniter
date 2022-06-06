@@ -11,6 +11,10 @@
 
     <?php if (current_user()): ?>
         <p>Hello! <?=current_user()->name?></p>
+        <?php if(current_user()->is_admin): ?>
+            <a href="<?= site_url("/admin/users") ?>">Users</a>
+            
+        <?php endif; ?>
         <a href="<?=site_url("/tasks")?>">See Tasks</a>
         <a href="<?=site_url("/logout")?>">Logout</a>
     <?php else: ?>
