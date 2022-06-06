@@ -1,4 +1,5 @@
-<input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"/>
+
+
 <div>
     <label for="description">Description</label>
     <input type="text" name="description" id="description" placeholder="type here..."

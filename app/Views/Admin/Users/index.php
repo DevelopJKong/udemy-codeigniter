@@ -1,0 +1,32 @@
+<?=$this->extend("layouts/default")?>
+
+<?=$this->section("title")?>Users<?=$this->endSection()?>
+
+<?=$this->section("content")?>
+
+    <h1>Users</h1>
+
+    <a href="<?=site_url('/admin/users/new')?>">New user</a>
+
+    <?php if ($users): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Created at</th>
+                </tr>
+            </thead>
+            <?php foreach ($users as $user): ?>
+                <tr>
+                    <td><a href="<?=site_url("/admin/users/show/" . $user->id)?>"> <?=esc($user->name)?> </a></td>
+                    <td><?=esc($user->email) ?></td>
+                    <td><?=esc($user->created_at) ?></td>
+                </tr>
+            <?php endforeach;?>
+        </table>
+    <?php else: ?>
+        <p>No users found </p>
+    <?php endif;?>
+
+<?=$this->endSection()?>
